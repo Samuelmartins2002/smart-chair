@@ -1,6 +1,6 @@
 import 'chair_status.dart';
 
-enum ChairCommand { frente, esquerda, direita, parar }
+enum ChairCommand { frente, tras, esquerda, direita, parar }
 
 abstract class ChairRepository {
   Stream<ChairStatus> watchStatus();

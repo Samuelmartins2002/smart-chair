@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 
 class SmartChairApp extends StatelessWidget {
   const SmartChairApp({super.key});
@@ -9,7 +10,7 @@ class SmartChairApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Smart Chair',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+      theme: AppTheme.light,
       routerConfig: appRouter,
     );
   }
