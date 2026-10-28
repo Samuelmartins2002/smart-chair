@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Usado para conectar à cadeira inteligente.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Usado para conectar ao Raspberry Pi na rede local.</string>
 </dict>
 </plist>
