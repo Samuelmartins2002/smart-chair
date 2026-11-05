@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import '../../features/control/presentation/control_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
+import '../../features/status/presentation/status_page.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/placeholder_page.dart';
 
@@ -19,7 +20,7 @@ final appRouter = GoRouter(
         StatefulShellBranch(routes: [
           GoRoute(
             path: '/status',
-            builder: (_, __) => const PlaceholderPage(title: 'Status'),
+            builder: (_, __) => const StatusPage(),
           ),
         ]),
         StatefulShellBranch(routes: [

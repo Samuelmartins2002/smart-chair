@@ -9,6 +9,7 @@ import 'widgets/chair_status_card.dart';
 import 'widgets/connection_card.dart';
 import 'widgets/recent_events_card.dart';
 import 'widgets/sensors_card.dart';
+import '../../status/presentation/battery_history_controller.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -16,6 +17,8 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(chairStatusProvider);
+
+    ref.watch(batteryHistoryProvider);
 
     return Scaffold(
       body: SafeArea(
