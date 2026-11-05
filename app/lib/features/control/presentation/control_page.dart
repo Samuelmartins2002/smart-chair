@@ -1,69 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../dashboard/domain/chair_repository.dart';
 import 'control_controller.dart';
+import 'widgets/dpad.dart';
+import 'widgets/gesture_legend.dart';
 
-class ControlPage extends ConsumerWidget {
+class ControlPage extends StatelessWidget {
   const ControlPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Controle',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          bottom: const TabBar(
+            tabs: [Tab(text: 'Gestos'), Tab(text: 'Toque')],
+          ),
+        ),
+        body: const TabBarView(
+          // evita que arrastar o dedo troque de aba durante o controle
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            _ControlTab(interactive: false),
+            _ControlTab(interactive: true),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ControlTab extends ConsumerWidget {
+  final bool interactive;
+  const _ControlTab({required this.interactive});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(controlControllerProvider.notifier);
     final last = ref.watch(controlControllerProvider).lastCommand;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Controle')),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
             children: [
-              Text(
-                'Último comando: ${last?.name.toUpperCase() ?? '—'}',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const Spacer(),
-              _HoldButton(
-                icon: Icons.arrow_upward,
-                label: 'FRENTE',
-                onPress: () => controller.send(ChairCommand.frente),
+              _LastCommandChip(last: last),
+              const SizedBox(height: 24),
+              DPad(
+                active: last == ChairCommand.parar ? null : last,
+                interactive: interactive,
+                onPress: controller.send,
                 onRelease: controller.stop,
+                onStop: controller.stop,
               ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _HoldButton(
-                    icon: Icons.arrow_back,
-                    label: 'ESQUERDA',
-                    onPress: () => controller.send(ChairCommand.esquerda),
-                    onRelease: controller.stop,
-                  ),
-                  const SizedBox(width: 12),
-                  _HoldButton(
-                    icon: Icons.arrow_forward,
-                    label: 'DIREITA',
-                    onPress: () => controller.send(ChairCommand.direita),
-                    onRelease: controller.stop,
-                  ),
-                ],
+              const SizedBox(height: 24),
+              Text(
+                interactive
+                    ? 'Segure um botão para mover. Ao soltar, a cadeira para.'
+                    : 'Mova a mão conforme a direção desejada.',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: AppColors.textMuted),
               ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 80,
-                child: FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.red.shade700,
-                  ),
-                  onPressed: controller.stop,
-                  icon: const Icon(Icons.stop_circle, size: 36),
-                  label: const Text(
-                    'PARAR',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              if (!interactive) ...[
+                const SizedBox(height: 20),
+                const GestureLegend(),
+              ],
             ],
           ),
         ),
@@ -72,38 +81,24 @@ class ControlPage extends ConsumerWidget {
   }
 }
 
-class _HoldButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onPress;
-  final VoidCallback onRelease;
-
-  const _HoldButton({
-    required this.icon,
-    required this.label,
-    required this.onPress,
-    required this.onRelease,
-  });
+class _LastCommandChip extends StatelessWidget {
+  final ChairCommand? last;
+  const _LastCommandChip({required this.last});
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (_) => onPress(),
-      onPointerUp: (_) => onRelease(),
-      onPointerCancel: (_) => onRelease(),
-      child: Container(
-        width: 140,
-        height: 100,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 36),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.blueGrey.shade100),
+      ),
+      child: Text(
+        'Último comando: ${last?.name.toUpperCase() ?? '—'}',
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          color: AppColors.navy,
         ),
       ),
     );
