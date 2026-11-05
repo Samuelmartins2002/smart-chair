@@ -34,6 +34,12 @@ final appRouter = GoRouter(
             builder: (_, __) => const PlaceholderPage(title: 'Configurações'),
           ),
         ]),
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: '/voice',
+            builder: (_, __) => const PlaceholderPage(title: 'Assistente de Voz'),
+          ),
+        ])
       ],
     ),
   ],
