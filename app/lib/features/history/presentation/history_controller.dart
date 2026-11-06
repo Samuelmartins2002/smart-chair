@@ -31,7 +31,7 @@ class HistoryController extends Notifier<List<ChairEvent>> {
     if (s.batteryPercent <= lowBattery && p.batteryPercent > lowBattery) {
       add(EventType.bateria, 'Bateria baixa (${s.batteryPercent}%)');
     }
-    if (s.mode != p.mode) {
+    if (s.mode != p.mode && s.mode != ControlMode.desconhecido && p.mode != ControlMode.desconhecido) {
       add(EventType.modo, 'Modo alterado para ${s.mode.label}');
     }
     if (s.state != p.state && s.state != SystemState.alerta) {

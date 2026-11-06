@@ -15,14 +15,8 @@ class BatteryHistoryController extends Notifier<List<BatterySample>> {
   List<BatterySample> build() {
     ref.listen(chairStatusProvider, (_, next) {
       next.whenData((s) {
-        final updated = [
-          ...state,
-          BatterySample(DateTime.now(), s.batteryPercent),
-        ];
-        state = updated.length > maxSamples
-            ? updated.sublist(updated.length - maxSamples)
-            : updated;
-      });
+          if(!s.isOnline) return;
+        });
     });
     return [];
   }
