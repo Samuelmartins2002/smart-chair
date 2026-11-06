@@ -20,6 +20,8 @@ class SettingsController extends Notifier<AppSettings> {
       notifications: _prefs.getBool('notifications') ?? d.notifications,
       batteryAlerts: _prefs.getBool('batteryAlerts') ?? d.batteryAlerts,
       obstacleAlerts: _prefs.getBool('obstacleAlerts') ?? d.obstacleAlerts,
+      piToken: _prefs.getString('piToken') ?? d.piToken,
+      useMock: _prefs.getBool('useMock') ?? d.useMock,
     );
   }
 
@@ -29,6 +31,8 @@ class SettingsController extends Notifier<AppSettings> {
     await _prefs.setBool('notifications', state.notifications);
     await _prefs.setBool('batteryAlerts', state.batteryAlerts);
     await _prefs.setBool('obstacleAlerts', state.obstacleAlerts);
+    await _prefs.setString('piToken', state.piToken);
+    await _prefs.setBool('useMock', state.useMock);
   }
 
   Future<void> update(AppSettings Function(AppSettings s) change) async {

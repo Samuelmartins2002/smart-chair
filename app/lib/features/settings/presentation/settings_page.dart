@@ -34,11 +34,23 @@ class SettingsPage extends ConsumerWidget {
                   title: 'Rede',
                   child: Column(
                     children: [
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Modo simulado (sem Pi)'),
+                        subtitle: const Text('Usa dados fictícios no próprio app'),
+                        value: s.useMock,
+                        onChanged: (v) => ctrl.update((x) => x.copyWith(useMock: v)),
+                      ),
                       _InfoRow(
                         icon: Icons.wifi,
                         label: 'Endereço do Pi',
                         value: '${s.piHost}:${s.piPort}',
                         onEdit: () => _editConnection(context, s, ctrl),
+                      ),
+                      _InfoRow(
+                        icon: Icons.key,
+                        label: 'Token de pareamento',
+                        value: s.piToken.isEmpty ? 'não definido' : '••••',
                       ),
                     ],
                   ),
@@ -124,6 +136,7 @@ class SettingsPage extends ConsumerWidget {
   ) async {
     final hostCtrl = TextEditingController(text: current.piHost);
     final portCtrl = TextEditingController(text: '${current.piPort}');
+    final tokenCtrl = TextEditingController(text: current.piToken);
 
     final ok = await showDialog<bool>(
       context: context,
@@ -145,6 +158,12 @@ class SettingsPage extends ConsumerWidget {
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: 'Porta'),
             ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: tokenCtrl,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Token (opcional)',),
+            ),
           ],
         ),
         actions: [
@@ -164,7 +183,7 @@ class SettingsPage extends ConsumerWidget {
     final host = hostCtrl.text.trim();
     final port = int.tryParse(portCtrl.text.trim());
     if (host.isEmpty || port == null || port < 1 || port > 65535) return;
-    await ctrl.update((x) => x.copyWith(piHost: host, piPort: port));
+    await ctrl.update((x) => x.copyWith(piHost: host, piPort: port, piToken: tokenCtrl.text.trim(),));
   }
 }
 
