@@ -14,6 +14,14 @@ class SensorsCard extends StatelessWidget {
       title: 'Sensores',
       child: Column(
         children: [
+          if (sensors.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                'Sem dados: cadeira offline.',
+                style: TextStyle(color: AppColors.textMuted),
+              ),
+            ),
           for (final s in sensors)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
