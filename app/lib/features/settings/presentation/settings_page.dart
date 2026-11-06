@@ -140,7 +140,7 @@ class SettingsPage extends ConsumerWidget {
 
     final ok = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Conexão com o Raspberry Pi'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -168,11 +168,11 @@ class SettingsPage extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(dialogContext, false),
             child: const Text('Cancelar'),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(dialogContext, true),
             child: const Text('Salvar'),
           ),
         ],
