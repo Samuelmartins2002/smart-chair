@@ -1,46 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/section_card.dart';
+import '../../../history/presentation/history_controller.dart';
 
-class RecentEventsCard extends StatelessWidget {
+class RecentEventsCard extends ConsumerWidget {
   const RecentEventsCard({super.key});
 
-  // TODO: trocar por dados reais quando existir o histórico (Etapa 6)
-  static const _events = [
-    ('14:32', 'Comando de movimento: frente'),
-    ('14:30', 'Bateria em 78%'),
-    ('14:28', 'Obstáculo detectado (frente)'),
-  ];
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final events = ref.watch(historyProvider).take(3).toList();
+
     return SectionCard(
       title: 'Últimos eventos',
       trailing: TextButton(
-        onPressed: () {}, // ligamos ao histórico na Etapa 6
+        onPressed: () => context.go('/history'),
         child: const Text('Ver histórico →'),
       ),
-      child: Column(
-        children: [
-          for (final e in _events)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 52,
-                    child: Text(e.$1,
-                        style: const TextStyle(color: AppColors.textMuted)),
-                  ),
-                  Expanded(
-                    child: Text(e.$2,
-                        style: const TextStyle(color: AppColors.navy)),
-                  ),
-                ],
+      child: events.isEmpty
+          ? const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                'Nenhum evento ainda.',
+                style: TextStyle(color: AppColors.textMuted),
               ),
+            )
+          : Column(
+              children: [
+                for (final e in events)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 52,
+                          child: Text(e.hhmm,
+                              style:
+                                  const TextStyle(color: AppColors.textMuted)),
+                        ),
+                        Expanded(
+                          child: Text(e.title,
+                              style: const TextStyle(color: AppColors.navy)),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }

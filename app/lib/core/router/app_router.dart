@@ -4,6 +4,8 @@ import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/status/presentation/status_page.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/placeholder_page.dart';
+import '../../features/history/presentation/history_page.dart';
+import '../../features/settings/presentation/settings_page.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -26,13 +28,13 @@ final appRouter = GoRouter(
         StatefulShellBranch(routes: [
           GoRoute(
             path: '/history',
-            builder: (_, __) => const PlaceholderPage(title: 'Histórico'),
+            builder: (_, __) => const HistoryPage(),
           ),
         ]),
         StatefulShellBranch(routes: [
           GoRoute(
             path: '/settings',
-            builder: (_, __) => const PlaceholderPage(title: 'Configurações'),
+            builder: (_, __) => const SettingsPage(),
           ),
         ]),
         StatefulShellBranch(routes: [

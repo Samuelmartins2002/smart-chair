@@ -10,6 +10,7 @@ import 'widgets/connection_card.dart';
 import 'widgets/recent_events_card.dart';
 import 'widgets/sensors_card.dart';
 import '../../status/presentation/battery_history_controller.dart';
+import '../../history/presentation/history_controller.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -19,6 +20,7 @@ class DashboardPage extends ConsumerWidget {
     final status = ref.watch(chairStatusProvider);
 
     ref.watch(batteryHistoryProvider);
+    ref.watch(historyProvider);
 
     return Scaffold(
       body: SafeArea(
